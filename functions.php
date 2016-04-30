@@ -194,31 +194,29 @@ function _s_the_first_image( $size = 'thumbnail', $args = array() ) {
 	);
 }
 
-if ( ! function_exists( '_s_get_comment_excerpt' ) ) :
-	/**
-	 * Get the comment excerpt.
-	 *
-	 * Comments from password-protected posts are hidden by default.
-	 *
-	 * @uses wp_trim_words()
-	 *
-	 * @param WP_Comment|string|int $comment_id           Optional. Comment to retrieve. Default is global `$comment`.
-	 * @param int                   $num_words            Optional. Number of words. Default is 20.
-	 * @param string|null           $more                 Optional. More text. Default is '&hellip;'.
-	 * @param bool                  $show_hidden_comments Optional. Whether to show comments from password-protected posts. Default is `false`.
-	 * @return string The comment excerpt.
-	 */
-	function _s_get_comment_excerpt( $comment_id = null, $num_words = 20, $more = null, $show_hidden_comments = false ) {
-		if ( ! $comment = get_comment( $comment_id ) ) {
-			return '';
-		}
-
-		if ( ! $show_hidden_comments && post_password_required( $comment->comment_post_ID ) ) {
-			return esc_html__( 'This comment is hidden.', '_s' );
-		}
-
-		$excerpt = wp_trim_words( $comment->comment_content, $num_words, $more );
-
-		return apply_filters( '_s_get_comment_excerpt', $excerpt );
+/**
+ * Get the comment excerpt.
+ *
+ * Comments from password-protected posts are hidden by default.
+ *
+ * @uses wp_trim_words()
+ *
+ * @param WP_Comment|string|int $comment_id           Optional. Comment to retrieve. Default is global `$comment`.
+ * @param int                   $num_words            Optional. Number of words. Default is 20.
+ * @param string|null           $more                 Optional. More text. Default is '&hellip;'.
+ * @param bool                  $show_hidden_comments Optional. Whether to show comments from password-protected posts. Default is `false`.
+ * @return string The comment excerpt.
+ */
+function _s_get_comment_excerpt( $comment_id = null, $num_words = 20, $more = null, $show_hidden_comments = false ) {
+	if ( ! $comment = get_comment( $comment_id ) ) {
+		return '';
 	}
-endif;
+
+	if ( ! $show_hidden_comments && post_password_required( $comment->comment_post_ID ) ) {
+		return esc_html__( 'This comment is hidden.', '_s' );
+	}
+
+	$excerpt = wp_trim_words( $comment->comment_content, $num_words, $more );
+
+	return apply_filters( '_s_get_comment_excerpt', $excerpt );
+}
